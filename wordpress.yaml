@@ -1,0 +1,23 @@
+---
+ - name: Install Package
+   become: yes
+   become_method: sudo
+   user: centos
+   hosts: all
+   tasks:
+     - name: Install wordpress
+       get_url:
+         url: https://wordpress.org/latest.zip
+         dest: /var/www/html
+         force_basic_auth: yes
+
+         unarchive: 
+           src: /var/www/html/latest.zip
+           dest: /var/www/html
+      
+         state: present
+         with_items:
+         - httpd
+         - telnet
+         - mysql
+         - gzip
