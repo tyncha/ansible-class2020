@@ -1,8 +1,17 @@
 ---
-- name: First Playbook
-  hosts: Localhost
+- name: Installs NCPA Agent 
   become: yes
   become_method: sudo
-  tasks:
-  - name: Task1
-    ping:
+  user: centos
+  hosts: all
+  tasks: 
+  - name: Creates a repo
+    when: (ansible_facts['distribution'] == "CentOS" and ansible_facts['distribution_major_version'] == "7")
+    shell: "rpm -Uvh http://repo.nagios.com/nagios/7/nagios-repo-7-4.el7.noarch.rpm"
+
+
+  - name: Install NCPA
+    when: (ansible_facts['distribution'] == "CentOS" and ansible_facts['distribution_major_version'] == "7")
+    package: 
+      name: ncpa 
+      state: latest
